@@ -1,0 +1,11 @@
+
+to run: npm start 
+server will run on: http://localhost:3000/
+web-socket will run on: ws://localhost:3000
+
+to view the site: open a browser and open http://localhost:3000/
+
+list of events: 
+touch-on: touch was initiated
+touch-move: touch was initiated and move
+touch-remove: touch was remove

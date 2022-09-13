@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .box {background-color:#E4E5E9; 
+        display: flex;
+        height: 100vh;
+        align-items: flex-end;
+        justify-content: center;
+        touch-action: none;
+    }
+    body   {height: 100vh;}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMU touch pad</title>
+</head>
+<body >
+    <div class="box">
+    <button style="background-color:#b29f9d; width: 10vw; height: 7vh;border-radius: 12px;" onmouseup="sendMessage()">PRESS HERE</button>
+    </div>
+
+</body>
+<script>
+    const socket = new WebSocket('ws://localhost:3000');
+    const body = document.querySelector('.box')
+
+    socket.addEventListener('open', function (event) {
+        console.log('Connected to WS Server')
+    });
+
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+    body.addEventListener('pointerdown', e => {
+        const full_window_height = window.outerHeight;
+        const full_window_width = window.outerWidth;
+        socket.send(JSON.stringify({
+            event: 'touch-on',
+            pointerPositionX:e.x/full_window_width,
+            pointerPositionY: e.y/full_window_height,
+        }));
+    })
+
+    body.addEventListener('pointermove', e => {
+        const full_window_height = window.outerHeight;
+        const full_window_width = window.outerWidth;
+
+        socket.send(JSON.stringify({
+            event: 'touch-move',
+            pointerPositionX:e.x/full_window_width,
+            pointerPositionY: e.y/full_window_height,
+        }));
+    })
+
+    body.addEventListener('pointerup', e => {
+        const full_window_height = window.outerHeight;
+        const full_window_width = window.outerWidth;
+        socket.send(JSON.stringify({
+            event: 'touch-remove',
+            pointerPositionX:e.x/full_window_width,
+            pointerPositionY: e.y/full_window_height,
+        }));
+    })
+
+
+    const sendMessage = () => {
+        socket.send('Button was clicked');
+    }
+</script>
+</html>
