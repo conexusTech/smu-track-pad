@@ -6,10 +6,12 @@ const path = require('path');
 
 const wss = new WebSocket.Server({ server:server });
 
-wss.on('connection', function connection(ws) {
+wss.on('connection', function connection(ws, req) {
+  console.log(req.url)
   console.log('A new client Connected!');
   ws.on('message', function incoming(message) {
-    console.log('pointer event: %s', message);
+    // console.log('pointer event: %s', message);
+    console.log(wss.clients)
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(message);

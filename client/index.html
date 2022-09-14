@@ -64,19 +64,21 @@
         const full_window_height = window.outerHeight;
         const full_window_width = window.outerWidth;
         const prevValue = localStorage.getItem('pos')
+        let valueX = 0
+        let valueY = 0
         if (prevValue){
             const value = JSON.parse(prevValue)
             const y = (e.y - value.y)
             const x = (e.x - value.x)
-            console.log(x)
-            console.log(y)
+            valueX = x
+            valueY = y
             const dot = document.querySelector('.dot')
             const style = getComputedStyle(dot)
             const newy = parseInt(style["top"]) 
             const newx = parseInt(style["left"])
             const element = document.getElementById('dot')
-            console.log('y: ', newy + y)
-            console.log('x: ', newx + x)
+            console.log('y: ', y)
+            console.log('x: ', x)
             element.style["top"] = `${newy + y}px`
             element.style["left"] = `${newx + x}px`;    
             localStorage.setItem('pos', JSON.stringify({x: e.x, y: e.y}))
@@ -85,16 +87,14 @@
             const style = getComputedStyle(dot)
             const newy = parseInt(style["top"]) 
             const newx = parseInt(style["left"])
-
-
             localStorage.setItem('pos', JSON.stringify({x: newx, y: newy}))
-
+            valueX = e.x
+            valueY = e.y
         }
-        
         socket.send(JSON.stringify({
             event: 'touch-move',
-            pointerPositionX:e.x/full_window_width,
-            pointerPositionY: e.y/full_window_height,
+            pointerPositionX:valueX/full_window_width,
+            pointerPositionY: valueY/full_window_height,
         }));
     })
 
