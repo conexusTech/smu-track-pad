@@ -25,4 +25,4 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/index.html'));
 })
 
-server.listen(3000, () => console.log(`Lisening on port :3000`))
+server.listen(8080, () => console.log(`Lisening on port :8080`))
